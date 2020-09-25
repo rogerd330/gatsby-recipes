@@ -3,6 +3,8 @@ import { graphql } from "gatsby"
 import { firestore } from  "../../firebase.js"
 import Layout from "../components/layout"
 import Comments from "../components/comments.js"
+import Helmet from "react-helmet"
+import AddToCart from "../components/add-to-cart.js"
 
 export default function RecipeTemplate({data}) {
     const recipe = data.contentfulRecipes
@@ -19,11 +21,19 @@ export default function RecipeTemplate({data}) {
       })
     }, [recipe] )
 
+
     return (
+      <>
+        <Helmet bodyAttributes={ { class: `product-page ${recipe.sku}` } }>
+          <title>{recipe.name} | My Restaurant</title>
+          <meta name="description" value="Come try my React restaurant!"/>
+        </Helmet>
         <Layout>
-            <h2>{recipe.name}</h2>
+            <h2 className="animate__animated animate__bounce">{recipe.name} - ${recipe.price.toFixed(2)}</h2>
             
-            <img src={recipe.image.file.url} alt={recipe.name} class="img-thumbnail" />
+            <AddToCart item={ {sku: recipe.sku, price: recipe.price, name: recipe.name} }></AddToCart>
+
+            <img src={recipe.image.file.url} alt={recipe.name} className="img-thumbnail" />
             <p>
                 {recipe.description.description}
             </p>
@@ -31,6 +41,7 @@ export default function RecipeTemplate({data}) {
             <Comments comments={comments} page={recipe.name} />
 
         </Layout>
+      </>
     )
 }
 
@@ -51,6 +62,8 @@ query recipeQuery($slug: String!) {
             url
         }
       }
+      price
+      sku
     }
   }
 `

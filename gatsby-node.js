@@ -18,6 +18,13 @@ exports.createPages = ({ actions, graphql }) => {
                             url
                         }
                     }
+                    gallery {
+                        file {
+                            url
+                        }
+                    }
+                    price
+                    sku
                 }
             }
         }
