@@ -9,8 +9,7 @@ export default function Home({data}) {
       <Helmet>
         <title>Home Page</title>
       </Helmet>
-      <div>Hello class!</div>
-
+      
       <div className="row">
       {data.allContentfulRecipes.nodes.map((node, index) => (
             <div className="col-md-3" key={index}>
@@ -27,25 +26,6 @@ export default function Home({data}) {
               </div>
             </div>
         ))}
-      </div>
-
-      <div id="carouselExampleControls" className="carousel slide" data-ride="carousel">
-        <div className="carousel-inner">
-          <div className="carousel-item active">
-            <img src="img/table.jpeg" className="d-block w-100" alt="Roger" />
-          </div>
-            <div className="carousel-item">
-              <img src="img/roger.jpeg" className="d-block w-100" alt="Restaurant Table"/>
-          </div>
-        </div>
-        <a className="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
-          <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span className="sr-only">Previous</span>
-        </a>
-        <a className="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
-          <span className="carousel-control-next-icon" aria-hidden="true"></span>
-          <span className="sr-only">Next</span>
-        </a>
       </div>
 
     </Layout>
