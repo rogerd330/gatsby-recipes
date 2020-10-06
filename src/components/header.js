@@ -39,6 +39,7 @@ export default function Header() {
             <ul className="list-group list-group-horizontal">
               <li className="list-group-item"><Link to="/">Home</Link></li>
               <li className="list-group-item"><Link to="about">About</Link></li>
+              <li className="list-group-item"><Link to="maps">Maps</Link></li>
               <li className="list-group-item"><Link to="checkout">Check Out</Link></li>
               <li className="list-group-item">
 
