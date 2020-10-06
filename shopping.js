@@ -4,6 +4,9 @@ export const CartContext = createContext()
 
 const cart = {
     addItem: function(item) {
+        if (typeof window === `undefined`) {
+            return
+        }
         let cart = window.localStorage.getItem("react-cart");
         if (!cart) {
             cart = {};
@@ -24,6 +27,9 @@ const cart = {
     },
 
     getItems: function() {
+        if (typeof window === `undefined`) {
+            return []
+        }
         let cart = window.localStorage.getItem("react-cart");
         if (!cart) {
             cart = {};
