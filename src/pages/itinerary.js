@@ -2,10 +2,15 @@
 import React, { useState } from "react"
 import Layout from "../components/layout"
 import { GoogleMap, LoadScript, MarkerClusterer, Marker, InfoWindow } from '@react-google-maps/api';
+import { Modal, Button } from "react-bootstrap"
 
 export default function Itinerary() {
 
-    const [ spots, setSpots ] = useState([])
+    const [ selected, setSelected ] = useState(null) // The selected pin location
+    const [ spots, setSpots ] = useState([]) // All the selected locations
+    const [ show, setShow ] = useState(false); // Control the state of the model (visible/hidden)
+
+    const handleClose = () => setShow(false);
 
     const locations = [
         {lat: 28.3852, lng: -81.5639, title: 'Disney World', street: '123 Mickey Mouse Lane'},
@@ -19,18 +24,15 @@ export default function Itinerary() {
 
     function clickMarker(idx) {
         const location = locations[idx];
-        setSpots( spots.concat(location) )
+        setSelected(location)
+        setShow(true)
     }
 
-    const divStyle = {
-        background: `white`,
-        border: `1px solid #ccc`,
-        padding: 15
-      }
-      
-      const onLoad = infoWindow => {
-        console.log('infoWindow: ', infoWindow)
-      }
+    function addSpot(location) {
+        setSpots( spots.concat(location) )
+        //TODO change the marker icon
+        setShow(false);
+    }
 
     return (
         <>
@@ -46,25 +48,34 @@ export default function Itinerary() {
                                 <MarkerClusterer options={options}>
                                     {(clusterer) =>
                                         locations.map((location, idx) => (
-                                            // <Marker key={idx} position={location} clusterer={clusterer} title={location.title} onClick={ () => { clickMarker(idx)}} />
-                                            <InfoWindow
-                                                onLoad={onLoad}
-                                                position={location}
-                                            >
-                                                <div style={divStyle}>
-                                                    <h1>InfoWindow</h1>
-                                                    <p>
-                                                        About this spot.
-                                                        <button onClick={() => { clickMarker(idx)} }>Add to List</button>
-                                                    </p>
-                                                </div>
-                                            </InfoWindow>
+                                            <div key={idx}>
+                                                <Marker position={location} clusterer={clusterer} title={location.title} onClick={ () => { clickMarker(idx)}} />
+                                            </div>
                                         ))
                                     }
                                 </MarkerClusterer>
                             </GoogleMap>
 
                         </LoadScript>
+
+                        { selected && 
+                        <Modal show={show} onHide={handleClose}>
+                            <Modal.Header closeButton>
+                                <Modal.Title>{selected.title}</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                                <p>
+                                    {selected.street}
+                                </p>
+                                <Button onClick={() => { addSpot(selected)} }>Add to List</Button>
+                            </Modal.Body>
+                            <Modal.Footer>
+                            <Button variant="secondary" onClick={handleClose}>
+                                Close
+                            </Button>
+                            </Modal.Footer>
+                        </Modal>
+                        }
 
                     </div>
                     <div className="col-sm-4">
@@ -76,9 +87,9 @@ export default function Itinerary() {
                                 <>
                                 <h3>Places to Visit</h3>
                                 <ol>
-                                {spots.map( spot => {
+                                {spots.map( (spot, idx) => {
                                     return (
-                                        <li>
+                                        <li key={idx}>
                                             {spot.title}
                                             <br/>
                                             <small>{spot.street}</small>
